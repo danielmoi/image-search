@@ -16,7 +16,10 @@ router.get('/api/imagesearch/:search', async (req, res) => {
   console.log('search:', search);
   console.log('query:', query);
 
-  const qst = qs.stringify({ q: search });
+  const qst = qs.stringify({
+    q: search,
+    offset: query.offset,
+  });
 
   console.log('process.env.BING_SUBSCRIPTION_KEY:', process.env.BING_SUBSCRIPTION_KEY);
 
@@ -27,11 +30,17 @@ router.get('/api/imagesearch/:search', async (req, res) => {
       'Ocp-Apim-Subscription-Key': process.env.BING_SUBSCRIPTION_KEY,
     },
   });
+
   console.log('result:', result);
 
-  res.json({
-    result: result.data,
-  });
+  const data = result.data.value.map(r => ({
+    altText: r.name,
+    imageUrl: r.contentUrl,
+    pageUrl: r.hostPageUrl,
+  }));
+  console.log('result:', result);
+
+  res.json(data);
 });
 
 
