@@ -10,18 +10,19 @@ router.get('/health', (req, res) => {
 });
 
 
+router.get('/api/imagesearch/latest', (req, res) => {
+  res.send('Latest results!');
+});
+
+
 router.get('/api/imagesearch/:search', async (req, res) => {
   const { search } = req.params;
   const { query } = req;
-  console.log('search:', search);
-  console.log('query:', query);
 
   const qst = qs.stringify({
     q: search,
     offset: query.offset,
   });
-
-  console.log('process.env.BING_SUBSCRIPTION_KEY:', process.env.BING_SUBSCRIPTION_KEY);
 
   const result = await axios({
     method: 'GET',
@@ -31,14 +32,11 @@ router.get('/api/imagesearch/:search', async (req, res) => {
     },
   });
 
-  console.log('result:', result);
-
   const data = result.data.value.map(r => ({
     altText: r.name,
     imageUrl: r.contentUrl,
     pageUrl: r.hostPageUrl,
   }));
-  console.log('result:', result);
 
   res.json(data);
 });
