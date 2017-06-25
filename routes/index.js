@@ -2,6 +2,7 @@
 const express = require('express');
 const axios = require('axios');
 const qs = require('qs');
+const { Search } = require('../models');
 
 const router = express.Router();
 
@@ -10,7 +11,13 @@ router.get('/health', (req, res) => {
 });
 
 
-router.get('/api/imagesearch/latest', (req, res) => {
+router.get('/api/imagesearch/latest', async (req, res) => {
+  const results = await Search.findAll();
+  console.log('results:', results);
+  const data = await Search.create({
+    searchString: 'Hello',
+  });
+  console.log('data:', data);
   res.send('Latest results!');
 });
 

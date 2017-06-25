@@ -1,0 +1,5 @@
+CREATE USER cookies;
+ALTER USER cookies WITH SUPERUSER;
+CREATE DATABASE imagesearch;
+
+GRANT ALL PRIVILEGES ON DATABASE imagesearch TO cookies;

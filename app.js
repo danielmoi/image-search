@@ -1,6 +1,7 @@
 const express = require('express');
-const path = require('path');
 const dotenv = require('dotenv');
+
+const models = require('./models');
 
 dotenv.config({ path: '.env' });
 
@@ -19,6 +20,8 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
-  console.log(`🌳  🌳  🌳  Now listening on ${port} 🌳  🌳  🌳`);
+models.sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log(`🌳  🌳  🌳  Now listening on ${port} 🌳  🌳  🌳`);
+  });
 });
