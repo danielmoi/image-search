@@ -20,7 +20,7 @@ router.get('/api/imagesearch/latest', async (req, res) => {
   });
   const data = results.map(r => ({
     searchString: r.searchString,
-    searchTime: moment(r.createdAt).format('dddd DD MMM YYYY HH:MMa'),
+    searchTime: moment(r.createdAt).toISOString(),
   }));
   res.send(data);
 });
