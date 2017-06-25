@@ -56,5 +56,19 @@ router.get('/api/imagesearch/:search', async (req, res) => {
   res.json(data);
 });
 
+router.get('/*', (req, res) => {
+  const protocol = req.protocol;
+  const host = req.headers.host;
+
+  const url = `${protocol}://${host}`;
+  const suggest = `${url}/api/imagesearch/kittens`;
+  const latest = `${url}/api/imagesearch/latest`;
+
+  res.send({
+    try_this: suggest,
+    or_this: latest,
+  });
+});
+
 
 module.exports = router;
