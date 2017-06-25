@@ -1,9 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 
+dotenv.config({ path: '.env' });
+
 const models = require('./models');
 
-dotenv.config({ path: '.env' });
 
 const routes = require('./routes');
 

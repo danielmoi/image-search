@@ -9,10 +9,17 @@ const basename = path.basename(module.filename);
 const db = {};
 let sequelize;
 
-if (config.use_env_constiable) {
-  sequelize = new Sequelize(process.env[config.use_env_constiable]);
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(
+    process.env.DATABASE_NAME,
+    process.env.DATABASE_USER,
+    process.env.DATABASE_PASS, {
+      host: process.env.DATABASE_HOST,
+      dialect: 'postgres',
+      port: process.env.DATABASE_PORT,
+    });
 }
 
 fs.readdirSync(__dirname)
