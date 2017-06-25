@@ -2,6 +2,8 @@
 const express = require('express');
 const axios = require('axios');
 const qs = require('qs');
+const moment = require('moment');
+
 const { Search } = require('../models');
 
 const router = express.Router();
@@ -12,13 +14,15 @@ router.get('/health', (req, res) => {
 
 
 router.get('/api/imagesearch/latest', async (req, res) => {
-  const results = await Search.findAll();
-  console.log('results:', results);
-  const data = await Search.create({
-    searchString: 'Hello',
+  const results = await Search.findAll({
+    limit: 10,
+    order: [['createdAt', 'DESC']],
   });
-  console.log('data:', data);
-  res.send('Latest results!');
+  const data = results.map(r => ({
+    searchString: r.searchString,
+    searchTime: moment(r.createdAt).format('dddd DD MMM YYYY HH:MMa'),
+  }));
+  res.send(data);
 });
 
 
@@ -29,6 +33,10 @@ router.get('/api/imagesearch/:search', async (req, res) => {
   const qst = qs.stringify({
     q: search,
     offset: query.offset,
+  });
+
+  await Search.create({
+    searchString: search,
   });
 
   const result = await axios({
